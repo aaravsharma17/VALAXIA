@@ -8,9 +8,10 @@ const Projects = () => {
       title: 'ParkSense AI',
       description: 'Advanced AI-powered diagnostic platform utilizing 10+ machine learning models to detect early signs of Parkinson\'s disease through voice analysis of jitter and shimmer patterns in CSV data format, providing personalized risk assessments.',
       status: 'Completed',
-      phase: 'Deployed in US',
+      phase: 'Live Production',
       completion: '100%',
-      timeline: 'Live'
+      timeline: 'Live',
+      link: 'https://parksenseai.netlify.app/'
     },
     {
       title: 'eSangrahan',
@@ -121,6 +122,21 @@ const Projects = () => {
                       <p className="text-sm sm:text-base text-gray-300 mb-6 leading-relaxed font-inter">
                         {solution.description}
                       </p>
+
+                      {/* Live Link for completed projects */}
+                      {solution.link && (
+                        <div className="mb-6">
+                          <a
+                            href={solution.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600/80 to-green-800 hover:from-green-500 hover:to-green-700 text-white text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-green-500/30 font-inter"
+                          >
+                            <span>View Live Project</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </a>
+                        </div>
+                      )}
 
                       {/* Progress Section */}
                       <div className="space-y-3">
