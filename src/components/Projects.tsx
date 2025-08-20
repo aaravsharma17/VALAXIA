@@ -5,6 +5,14 @@ import GlassmorphicCard from './GlassmorphicCard';
 const Projects = () => {
   const solutions = [
     {
+      title: 'ParkSense AI',
+      description: 'Advanced AI-powered diagnostic platform utilizing 10+ machine learning models to detect early signs of Parkinson\'s disease through voice analysis of jitter and shimmer patterns in CSV data format, providing personalized risk assessments.',
+      status: 'Completed',
+      phase: 'Deployed in US',
+      completion: '100%',
+      timeline: 'Live'
+    },
+    {
       title: 'eSangrahan',
       description: 'Digital collection and management platform revolutionizing data organization and accessibility for modern enterprises.',
       status: 'In Progress',
@@ -76,7 +84,9 @@ const Projects = () => {
               >
                 {/* Timeline Point */}
                 <div className="absolute left-4 sm:left-1/2 transform -translate-x-1/2 w-4 sm:w-6 h-4 sm:h-6 bg-gradient-to-r from-gray-500 to-gray-700 rounded-full border-2 sm:border-4 border-black shadow-lg z-20">
-                  <div className="absolute inset-1 bg-white rounded-full animate-pulse"></div>
+                  <div className={`absolute inset-1 rounded-full ${
+                    solution.status === 'Completed' ? 'bg-green-400' : 'bg-white animate-pulse'
+                  }`}></div>
                 </div>
 
                 {/* Solution Card */}
@@ -88,8 +98,12 @@ const Projects = () => {
                       {/* Status Badge */}
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-4">
                         <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-                          <span className="text-xs sm:text-sm font-medium text-gray-400 font-inter">
+                          <Clock className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                            solution.status === 'Completed' ? 'text-green-400' : 'text-gray-400'
+                          }`} />
+                          <span className={`text-xs sm:text-sm font-medium font-inter ${
+                            solution.status === 'Completed' ? 'text-green-400' : 'text-gray-400'
+                          }`}>
                             {solution.status}
                           </span>
                         </div>
@@ -122,7 +136,11 @@ const Projects = () => {
                         {/* Progress Bar */}
                         <div className="w-full bg-gray-800 rounded-full h-1.5 sm:h-2 overflow-hidden">
                           <div 
-                            className="h-full bg-gradient-to-r from-gray-500 to-gray-400 rounded-full transition-all duration-1000 ease-out"
+                            className={`h-full rounded-full transition-all duration-1000 ease-out ${
+                              solution.status === 'Completed' 
+                                ? 'bg-gradient-to-r from-green-500 to-green-400' 
+                                : 'bg-gradient-to-r from-gray-500 to-gray-400'
+                            }`}
                             style={{ width: solution.completion }}
                           ></div>
                         </div>
@@ -151,6 +169,10 @@ const Projects = () => {
         <div className="mt-16 text-center">
           <GlassmorphicCard className="inline-block p-4 sm:p-6 mx-4">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-400 font-inter">
+              <div className="flex items-center gap-2">
+                <div className="w-2 sm:w-3 h-2 sm:h-3 bg-gradient-to-r from-green-500 to-green-400 rounded-full"></div>
+                <span>Completed</span>
+              </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 sm:w-3 h-2 sm:h-3 bg-gradient-to-r from-gray-500 to-gray-400 rounded-full"></div>
                 <span>In Development</span>
