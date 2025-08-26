@@ -62,11 +62,24 @@ const About = () => {
             ABOUT VALAXIA
           </h2>
           <div className="w-16 sm:w-24 h-1 bg-gradient-to-r from-gray-400 to-gray-600 mx-auto mb-8"></div>
-          <p className="text-lg sm:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-inter px-4">
-            VALAXIA is a technology galaxy where innovation meets infinite possibilities. 
-            We are a premier software company delivering comprehensive solutions that transform 
-            businesses and drive digital evolution across industries.
-          </p>
+          
+          {/* Orbiting Excellence Section */}
+          <div className="mb-12">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-white font-rajdhani tracking-wide uppercase">
+                Orbiting Excellence
+              </h3>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+            </div>
+            <p className="text-lg sm:text-xl text-gray-300 max-w-5xl mx-auto leading-relaxed font-inter px-4 mb-8">
+              Step into the galaxy of technology with VALAXIA LLP. From programming to IT strategy, 
+              we offer end-to-end solutions that make businesses shine brighter in the digital universe. 
+              Driven by innovation, precision, and futuristic thinking, we help organizations reach 
+              new orbits of growth and efficiency.
+            </p>
+            <div className="w-32 sm:w-48 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto"></div>
+          </div>
         </div>
 
         {/* Current Services */}
