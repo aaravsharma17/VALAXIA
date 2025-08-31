@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
-import { Mail, Linkedin, Github, Send, MapPin } from 'lucide-react';
+import { Mail, Linkedin, Github, Send, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import GlassmorphicCard from './GlassmorphicCard';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
+
+  // EmailJS configuration - You'll need to set these up
+  const EMAILJS_SERVICE_ID = 'service_valaxia'; // Replace with your EmailJS service ID
+  const EMAILJS_TEMPLATE_ID = 'template_valaxia'; // Replace with your EmailJS template ID
+  const EMAILJS_PUBLIC_KEY = 'your_public_key'; // Replace with your EmailJS public key
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -21,35 +30,56 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+    setSubmitStatus('idle');
+
     try {
-      // Simulate form submission delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Create mailto link with proper encoding
-      const subject = encodeURIComponent(`VALAXIA Contact: ${formData.name}`);
-      const body = encodeURIComponent(
-        `Contact Form Submission\n\n` +
-        `Name: ${formData.name}\n` +
-        `Email: ${formData.email}\n\n` +
-        `Message:\n${formData.message}\n\n` +
-        `---\nSent from VALAXIA website contact form`
+      // Initialize EmailJS (you only need to do this once)
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+
+      // Prepare template parameters
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject || 'New Contact Form Submission',
+        message: formData.message,
+        to_email: 'valxgalaxy@gmail.com', // Your email
+        reply_to: formData.email,
+        timestamp: new Date().toLocaleString()
+      };
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams
       );
-      
-      const mailtoLink = `mailto:valxgalaxy@gmail.com?subject=${subject}&body=${body}`;
-      
-      // Open email client
-      window.location.href = mailtoLink;
-      
-      // Reset form after successful submission
-      setFormData({ name: '', email: '', message: '' });
-      
-      // Show success message (optional)
-      alert('Thank you for your message! Your email client should open now.');
+
+      if (response.status === 200) {
+        setSubmitStatus('success');
+        setStatusMessage('Message sent successfully! We\'ll get back to you soon.');
+        
+        // Reset form after successful submission
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          setSubmitStatus('idle');
+          setStatusMessage('');
+        }, 5000);
+      } else {
+        throw new Error('Failed to send message');
+      }
       
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('There was an error submitting your message. Please try again.');
+      console.error('Error sending email:', error);
+      setSubmitStatus('error');
+      setStatusMessage('Failed to send message. Please try again or contact us directly at valxgalaxy@gmail.com');
+      
+      // Clear error message after 8 seconds
+      setTimeout(() => {
+        setSubmitStatus('idle');
+        setStatusMessage('');
+      }, 8000);
     } finally {
       setIsSubmitting(false);
     }
@@ -91,10 +121,26 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="relative animate-slide-in-left">
             <GlassmorphicCard className="p-6 sm:p-8 lg:p-10 transition-all duration-500 transform hover:scale-105 hover:-rotate-1">
-              <form onSubmit={handleSubmit} className="relative space-y-8">
+              <form onSubmit={handleSubmit} className="relative space-y-6">
+                {/* Status Message */}
+                {submitStatus !== 'idle' && (
+                  <div className={`p-4 rounded-lg border flex items-center gap-3 ${
+                    submitStatus === 'success' 
+                      ? 'bg-green-500/20 border-green-500/30 text-green-300' 
+                      : 'bg-red-500/20 border-red-500/30 text-red-300'
+                  }`}>
+                    {submitStatus === 'success' ? (
+                      <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                    ) : (
+                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    )}
+                    <p className="text-sm font-inter">{statusMessage}</p>
+                  </div>
+                )}
+
                 <div>
                   <label htmlFor="name" className="block text-base sm:text-lg font-medium text-gray-300 mb-3 font-inter tracking-wide">
-                    Your Name
+                    Your Name *
                   </label>
                   <input
                     type="text"
@@ -103,14 +149,15 @@ const Contact = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 text-base sm:text-lg transform focus:scale-105"
-                    placeholder="Your name"
+                    placeholder="Your full name"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
                 
                 <div>
                   <label htmlFor="email" className="block text-base sm:text-lg font-medium text-gray-300 mb-3 font-inter tracking-wide">
-                    Email Address
+                    Email Address *
                   </label>
                   <input
                     type="email"
@@ -121,12 +168,29 @@ const Contact = () => {
                     className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 text-base sm:text-lg transform focus:scale-105"
                     placeholder="your.email@domain.com"
                     required
+                    disabled={isSubmitting}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="subject" className="block text-base sm:text-lg font-medium text-gray-300 mb-3 font-inter tracking-wide">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 text-base sm:text-lg transform focus:scale-105"
+                    placeholder="Project inquiry, consultation, etc."
+                    disabled={isSubmitting}
                   />
                 </div>
                 
                 <div>
                   <label htmlFor="message" className="block text-base sm:text-lg font-medium text-gray-300 mb-3 font-inter tracking-wide">
-                    Message
+                    Message *
                   </label>
                   <textarea
                     id="message"
@@ -135,8 +199,9 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 resize-none text-base sm:text-lg transform focus:scale-105"
-                    placeholder="Tell us about your project or idea..."
+                    placeholder="Tell us about your project requirements, budget, timeline, or any specific questions..."
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
                 
@@ -147,10 +212,26 @@ const Contact = () => {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 rounded-lg blur opacity-30 group-hover:opacity-50 transition-opacity"></div>
                   <div className="relative flex items-center justify-center gap-2 sm:gap-3">
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
-                    <Send className={`w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 ${isSubmitting ? 'animate-pulse' : 'group-hover:translate-x-2'}`} />
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Sending Message...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform duration-300" />
+                      </>
+                    )}
                   </div>
                 </button>
+
+                {/* Form Info */}
+                <div className="text-center">
+                  <p className="text-xs sm:text-sm text-gray-400 font-inter">
+                    Messages are delivered directly to our team inbox within minutes
+                  </p>
+                </div>
               </form>
             </GlassmorphicCard>
           </div>
@@ -189,8 +270,92 @@ const Contact = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Response Time Info */}
+              <div className="mt-8 p-4 bg-black/40 rounded-lg border border-gray-600/30">
+                <h4 className="text-lg font-semibold text-gray-300 mb-3 font-rajdhani">Response Time</h4>
+                <div className="space-y-2 text-sm text-gray-400 font-inter">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span>General inquiries: Within 24 hours</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                    <span>Project consultations: Within 48 hours</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                    <span>Enterprise solutions: Within 72 hours</span>
+                  </div>
+                </div>
+              </div>
+            </GlassmorphicCard>
+
+            {/* Quick Contact Options */}
+            <GlassmorphicCard className="p-6 sm:p-8 transition-all duration-500 transform hover:scale-105 hover:-rotate-1">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-300 mb-6 font-rajdhani tracking-wide">Quick Contact</h3>
+              
+              <div className="space-y-4">
+                <button 
+                  onClick={() => {
+                    const subject = encodeURIComponent('Project Consultation Request - VALAXIA');
+                    const body = encodeURIComponent('Hi VALAXIA team,\n\nI would like to discuss a project consultation.\n\nProject Type: \nBudget Range: \nTimeline: \n\nPlease let me know your availability.\n\nBest regards,');
+                    window.location.href = `mailto:valxgalaxy@gmail.com?subject=${subject}&body=${body}`;
+                  }}
+                  className="w-full p-4 bg-gradient-to-r from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-lg text-blue-300 hover:text-white hover:bg-blue-600/30 transition-all duration-300 transform hover:scale-105 font-inter text-sm sm:text-base"
+                >
+                  📋 Request Project Consultation
+                </button>
+                
+                <button 
+                  onClick={() => {
+                    const subject = encodeURIComponent('Service Pricing Inquiry - VALAXIA');
+                    const body = encodeURIComponent('Hi VALAXIA team,\n\nI am interested in learning more about your services and pricing.\n\nService of Interest: \nProject Scope: \nBudget Range: \n\nPlease provide detailed information.\n\nThank you,');
+                    window.location.href = `mailto:valxgalaxy@gmail.com?subject=${subject}&body=${body}`;
+                  }}
+                  className="w-full p-4 bg-gradient-to-r from-green-600/20 to-green-800/20 border border-green-500/30 rounded-lg text-green-300 hover:text-white hover:bg-green-600/30 transition-all duration-300 transform hover:scale-105 font-inter text-sm sm:text-base"
+                >
+                  💰 Get Service Pricing
+                </button>
+                
+                <button 
+                  onClick={() => {
+                    const subject = encodeURIComponent('Partnership Opportunity - VALAXIA');
+                    const body = encodeURIComponent('Hi VALAXIA team,\n\nI would like to explore partnership opportunities.\n\nCompany: \nPartnership Type: \nProposal: \n\nLooking forward to hearing from you.\n\nBest regards,');
+                    window.location.href = `mailto:valxgalaxy@gmail.com?subject=${subject}&body=${body}`;
+                  }}
+                  className="w-full p-4 bg-gradient-to-r from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-lg text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all duration-300 transform hover:scale-105 font-inter text-sm sm:text-base"
+                >
+                  🤝 Partnership Inquiry
+                </button>
+              </div>
             </GlassmorphicCard>
           </div>
+        </div>
+
+        {/* Setup Instructions */}
+        <div className="mt-16">
+          <GlassmorphicCard className="p-6 sm:p-8 mx-4">
+            <div className="text-center">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-300 mb-4 font-rajdhani">
+                📧 Email Setup Required
+              </h3>
+              <div className="text-sm sm:text-base text-gray-400 space-y-3 font-inter">
+                <p>To enable direct email delivery from the contact form, please:</p>
+                <div className="bg-black/50 p-4 rounded-lg border border-gray-600/30 text-left">
+                  <ol className="list-decimal list-inside space-y-2">
+                    <li>Sign up for a free EmailJS account at <a href="https://emailjs.com" target="_blank" className="text-blue-400 hover:text-blue-300">emailjs.com</a></li>
+                    <li>Create an email service (Gmail, Outlook, etc.)</li>
+                    <li>Create an email template</li>
+                    <li>Update the configuration in Contact.tsx with your IDs</li>
+                  </ol>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Until setup is complete, the quick contact buttons will open your default email client
+                </p>
+              </div>
+            </div>
+          </GlassmorphicCard>
         </div>
       </div>
     </section>
