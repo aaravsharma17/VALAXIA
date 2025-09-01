@@ -126,13 +126,24 @@ const Projects = () => {
                       {/* Live Link for completed projects */}
                       {solution.link && (
                         <div className="mb-6">
+                          {solution.note && (
+                            <div className="mb-3">
+                              <span className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-500/20 text-yellow-300 text-xs rounded-full border border-yellow-500/30 font-inter">
+                                ⚠️ {solution.note}
+                              </span>
+                            </div>
+                          )}
                           <a
                             href={solution.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600/80 to-green-800 hover:from-green-500 hover:to-green-700 text-white text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-green-500/30 font-inter"
+                            className={`inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-inter ${
+                              solution.status === 'Completed' 
+                                ? 'bg-gradient-to-r from-green-600/80 to-green-800 hover:from-green-500 hover:to-green-700 hover:shadow-green-500/30' 
+                                : 'bg-gradient-to-r from-blue-600/80 to-blue-800 hover:from-blue-500 hover:to-blue-700 hover:shadow-blue-500/30'
+                            }`}
                           >
-                            <span>View Live Project</span>
+                            <span>{solution.status === 'Completed' ? 'View Live Project' : 'Preview Project'}</span>
                             <ArrowRight className="w-4 h-4" />
                           </a>
                         </div>

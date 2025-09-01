@@ -18,9 +18,11 @@ import {
   Star
 } from 'lucide-react';
 import GlassmorphicCard from './GlassmorphicCard';
+import ServicePortal from './ServicePortal';
 
 const Services = () => {
   const [expandedService, setExpandedService] = useState<number | null>(null);
+  const [selectedService, setSelectedService] = useState<number | null>(null);
 
   const services = [
     {
@@ -82,7 +84,7 @@ const Services = () => {
       ]
     },
     {
-      icon: Cloud,
+      icon: Brain,
       title: "SaaS Product Development",
       description: "Cloud-hosted, multi-tenant software products for B2B or consumer use.",
       useCases: ["CRM SaaS", "ERP SaaS", "Productivity tools"],
@@ -140,7 +142,7 @@ const Services = () => {
       ]
     },
     {
-      icon: Brain,
+      icon: Settings,
       title: "AI/ML Implementation",
       description: "ML models, NLP, computer vision, predictive analytics integration.",
       useCases: ["Chatbots", "Recommendation systems", "Predictive analytics", "IoT intelligence"],
@@ -169,7 +171,7 @@ const Services = () => {
       ]
     },
     {
-      icon: Settings,
+      icon: Cloud,
       title: "Cloud & DevOps Solutions",
       description: "Cloud migration, infrastructure setup, CI/CD pipelines, container orchestration.",
       useCases: ["Hosting", "Scalable deployments", "Hybrid cloud solutions"],
@@ -319,8 +321,20 @@ const Services = () => {
     setExpandedService(expandedService === index ? null : index);
   };
 
+  const handleGetStarted = (index: number) => {
+    setSelectedService(index);
+  };
+
+  if (selectedService !== null) {
+    return (
+      <ServicePortal 
+        service={services[selectedService]} 
+        onBack={() => setSelectedService(null)} 
+      />
+    );
+  }
   return (
-    <section id="services" className="relative py-24 px-6 overflow-hidden">
+    <section id="services" className="relative py-16 px-6 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-800/20 via-black to-black"></div>
@@ -328,7 +342,7 @@ const Services = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-white mb-6 font-rajdhani tracking-wide sm:tracking-wider uppercase">
             Our Services
           </h2>
@@ -342,7 +356,7 @@ const Services = () => {
         </div>
 
         {/* Services Grid */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {services.map((service, index) => (
             <GlassmorphicCard 
               key={index} 
@@ -442,6 +456,7 @@ const Services = () => {
 
                           {/* CTA Button */}
                           <button className={`w-full mt-6 px-4 py-3 bg-gradient-to-r ${tier.color} hover:scale-105 text-white font-semibold rounded-lg transition-all duration-300 font-inter text-sm`}>
+                            onClick={() => handleGetStarted(index)}
                             Get Started
                           </button>
                         </div>
@@ -455,7 +470,7 @@ const Services = () => {
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-20 text-center">
+        <div className="mt-16 text-center">
           <GlassmorphicCard className="inline-block p-8 mx-4">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 font-rajdhani">
               Need a Custom Solution?
