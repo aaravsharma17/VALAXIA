@@ -1,0 +1,22 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="#000000"/>
+  
+  <!-- V Shape -->
+  <path d="M6 8 L12 20 L18 8" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- A Shape -->
+  <path d="M20 20 L23 8 L26 20 M21.5 15 L24.5 15" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Tech accent dots -->
+  <circle cx="8" cy="25" r="1.5" fill="#ffffff" opacity="0.7"/>
+  <circle cx="16" cy="25" r="1.5" fill="#ffffff" opacity="0.7"/>
+  <circle cx="24" cy="25" r="1.5" fill="#ffffff" opacity="0.7"/>
+  
+  <!-- Subtle grid pattern -->
+  <defs>
+    <pattern id="grid" width="4" height="4" patternUnits="userSpaceOnUse">
+      <path d="M 4 0 L 0 0 0 4" fill="none" stroke="#ffffff" stroke-width="0.3" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="32" height="32" fill="url(#grid)"/>
+</svg>

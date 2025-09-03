@@ -14,36 +14,41 @@ const Projects = () => {
       link: 'https://parksenseai.netlify.app/'
     },
     {
-      title: 'eSangrahan',
-      description: 'Digital collection and management platform revolutionizing data organization and accessibility for modern enterprises.',
+      title: 'eSangrahan (Skeptical Version)',
+      description: 'Digital collection and management platform revolutionizing data organization and accessibility for modern enterprises. Currently in development with core features being tested.',
       status: 'In Progress',
       phase: 'Development Phase',
       completion: '65%',
-      timeline: 'Q2 2025'
+      timeline: 'Q2 2025',
+      link: '#',
+      note: 'Skeptical version - under development'
     },
     {
-      title: 'MedVA',
-      description: 'Advanced medical virtual assistant providing intelligent healthcare solutions and patient management systems.',
+      title: 'MedVA - Android App',
+      description: 'Advanced medical virtual assistant Android application providing intelligent healthcare solutions and patient management systems. Model development complete, application in final testing phase.',
       status: 'In Progress',
-      phase: 'Testing Phase',
-      completion: '80%',
+      phase: 'Model Complete, App Testing',
+      completion: '90%',
       timeline: 'Q1 2025'
     },
     {
-      title: 'TourVA',
-      description: 'Comprehensive tourism virtual assistant offering personalized travel experiences and destination management.',
+      title: 'LifeInbrief',
+      description: 'Comprehensive tourism platform designed specially for Uttarakhand Tourism, offering personalized travel experiences and destination management for the beautiful state.',
       status: 'In Progress',
-      phase: 'Design Phase',
+      phase: 'Live Website',
       completion: '45%',
-      timeline: 'Q3 2025'
+      timeline: 'Q3 2025',
+      link: 'https://liveinbrief.netlify.app/'
     },
     {
-      title: 'SportsIn',
-      description: 'Integrated sports management platform connecting athletes, coaches, and organizations in a unified ecosystem.',
+      title: 'SportsIn (Skeptical Version)',
+      description: 'VALAXIA Originals - A comprehensive social media platform designed for all sports enthusiasts across the globe. Connecting athletes, coaches, fans, and organizations in a unified sports ecosystem.',
       status: 'In Progress',
       phase: 'Planning Phase',
       completion: '30%',
-      timeline: 'Q4 2025'
+      timeline: 'Q4 2025',
+      link: '#',
+      note: 'VALAXIA Originals - Skeptical version'
     }
   ];
 

@@ -455,8 +455,10 @@ const Services = () => {
                           </div>
 
                           {/* CTA Button */}
-                          <button className={`w-full mt-6 px-4 py-3 bg-gradient-to-r ${tier.color} hover:scale-105 text-white font-semibold rounded-lg transition-all duration-300 font-inter text-sm`}>
+                          <button 
                             onClick={() => handleGetStarted(index)}
+                            className={`w-full mt-6 px-4 py-3 bg-gradient-to-r ${tier.color} hover:scale-105 text-white font-semibold rounded-lg transition-all duration-300 font-inter text-sm`}
+                          >
                             Get Started
                           </button>
                         </div>

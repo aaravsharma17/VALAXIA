@@ -1,15 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Sparkles, FileText, Shield } from 'lucide-react';
 
 const Footer = () => {
-  const handlePrivacyClick = () => {
-    window.open('/privacy-policy', '_blank');
-  };
-
-  const handleTermsClick = () => {
-    window.open('/terms-of-service', '_blank');
-  };
-
   return (
     <footer className="relative py-16 px-6 overflow-hidden">
       {/* Void Background */}
@@ -40,20 +33,20 @@ const Footer = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
-              <button 
-                onClick={handlePrivacyClick}
-                className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors text-sm sm:text-base font-inter"
+              <Link 
+                to="/privacy-policy"
+                className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors text-sm sm:text-base font-inter hover:underline"
               >
                 <Shield className="w-3 h-3 sm:w-4 sm:h-4" />
                 Privacy Policy
-              </button>
-              <button 
-                onClick={handleTermsClick}
-                className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors text-sm sm:text-base font-inter"
+              </Link>
+              <Link 
+                to="/terms-of-service"
+                className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors text-sm sm:text-base font-inter hover:underline"
               >
                 <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
                 Terms of Service
-              </button>
+              </Link>
             </div>
           </div>
         </div>

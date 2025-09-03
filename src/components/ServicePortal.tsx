@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Send, CheckCircle, AlertCircle, IndianRupee, Clock, Star } from 'lucide-react';
+import { ArrowLeft, Send, CheckCircle, AlertCircle, IndianRupee, Clock, Star, Home } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import GlassmorphicCard from './GlassmorphicCard';
 import { submitServiceInquiry, ServiceInquiry } from '../lib/supabase';
 
@@ -117,17 +118,27 @@ Submitted from VALAXIA Services Portal
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-12">
-            <button 
-              onClick={onBack}
-              className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors mb-8 font-inter"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              Back to Services
-            </button>
+            <div className="flex items-center gap-4 mb-8">
+              <button 
+                onClick={onBack}
+                className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors font-inter hover:underline"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                Back to Services
+              </button>
+              <div className="w-px h-6 bg-gray-600"></div>
+              <Link 
+                to="/"
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-inter text-sm hover:underline"
+              >
+                <Home className="w-4 h-4" />
+                Home
+              </Link>
+            </div>
             
             <div className="text-center">
               <div className="flex items-center justify-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full p-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full p-4 shadow-lg shadow-gray-500/30">
                   <service.icon className="w-full h-full text-white" />
                 </div>
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-white font-rajdhani tracking-wider">
@@ -148,7 +159,7 @@ Submitted from VALAXIA Services Portal
                 <h3 className="text-2xl font-bold text-gray-300 mb-6 font-rajdhani">Use Cases</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {service.useCases.map((useCase, index) => (
-                    <div key={index} className="p-3 bg-gray-700/30 rounded-lg border border-gray-600/30 text-center">
+                    <div key={index} className="p-3 bg-gray-700/30 rounded-lg border border-gray-600/30 text-center transform hover:scale-105 transition-transform duration-200">
                       <span className="text-gray-300 font-inter text-sm">{useCase}</span>
                     </div>
                   ))}
@@ -163,9 +174,9 @@ Submitted from VALAXIA Services Portal
                     <div
                       key={index}
                       onClick={() => setSelectedTier(index)}
-                      className={`p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
+                      className={`p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-105 ${
                         selectedTier === index
-                          ? `border-white/50 bg-gradient-to-r ${tier.color}/20`
+                          ? `border-white/50 bg-gradient-to-r ${tier.color}/20 shadow-lg`
                           : 'border-gray-600/30 hover:border-gray-500/50'
                       }`}
                     >
@@ -173,6 +184,7 @@ Submitted from VALAXIA Services Portal
                         <div className="flex items-center gap-3">
                           {index === 2 && <Star className="w-5 h-5 text-yellow-400" />}
                           <h4 className="text-xl font-bold text-white font-rajdhani">{tier.name}</h4>
+                          {selectedTier === index && <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>}
                         </div>
                         <div className="flex items-center gap-1">
                           <IndianRupee className="w-5 h-5 text-gray-300" />
@@ -201,7 +213,7 @@ Submitted from VALAXIA Services Portal
 
             {/* Inquiry Form */}
             <div>
-              <GlassmorphicCard className="p-8">
+              <GlassmorphicCard className="p-8 sticky top-8">
                 <h3 className="text-2xl font-bold text-gray-300 mb-6 font-rajdhani">Start Your Project</h3>
                 
                 {/* Status Message */}
@@ -240,7 +252,7 @@ Submitted from VALAXIA Services Portal
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 transform focus:scale-105"
                         placeholder="Your full name"
                         required
                         disabled={isSubmitting}
@@ -254,7 +266,7 @@ Submitted from VALAXIA Services Portal
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 transform focus:scale-105"
                         placeholder="your.email@domain.com"
                         required
                         disabled={isSubmitting}
@@ -268,7 +280,7 @@ Submitted from VALAXIA Services Portal
                         name="company"
                         value={formData.company}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 transform focus:scale-105"
                         placeholder="Your company name"
                         disabled={isSubmitting}
                       />
@@ -281,7 +293,7 @@ Submitted from VALAXIA Services Portal
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 transform focus:scale-105"
                         placeholder="+91 XXXXX XXXXX"
                         disabled={isSubmitting}
                       />
@@ -295,7 +307,7 @@ Submitted from VALAXIA Services Portal
                       value={formData.project_description}
                       onChange={handleInputChange}
                       rows={4}
-                      className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 resize-none"
+                      className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 resize-none transform focus:scale-105"
                       placeholder="Describe your project requirements, goals, and any specific features you need..."
                       required
                       disabled={isSubmitting}
@@ -349,7 +361,7 @@ Submitted from VALAXIA Services Portal
                       value={formData.additional_requirements}
                       onChange={handleInputChange}
                       rows={3}
-                      className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 resize-none"
+                      className="w-full px-4 py-3 bg-black/60 border border-gray-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30 transition-all duration-300 resize-none transform focus:scale-105"
                       placeholder="Any specific technologies, integrations, or special requirements..."
                       disabled={isSubmitting}
                     />
@@ -443,6 +455,30 @@ Submitted from VALAXIA Services Portal
                 </div>
               </GlassmorphicCard>
             </div>
+          </div>
+
+          {/* Database Setup Notice */}
+          <div className="mt-12">
+            <GlassmorphicCard className="p-6 mx-4">
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-gray-300 mb-4 font-rajdhani">
+                  🗄️ Database Setup Required
+                </h3>
+                <div className="text-sm text-gray-400 space-y-3 font-inter">
+                  <p>To enable direct database storage of inquiries, please set up Supabase:</p>
+                  <div className="bg-black/50 p-4 rounded-lg border border-gray-600/30 text-left">
+                    <ol className="list-decimal list-inside space-y-2">
+                      <li>Click "Connect to Supabase" button in the top right</li>
+                      <li>Create the required database tables</li>
+                      <li>Update environment variables</li>
+                    </ol>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    Until setup is complete, inquiries will open your default email client
+                  </p>
+                </div>
+              </div>
+            </GlassmorphicCard>
           </div>
         </div>
       </div>

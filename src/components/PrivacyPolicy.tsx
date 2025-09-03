@@ -1,12 +1,9 @@
 import React from 'react';
-import { ArrowLeft, Shield, Eye, Lock, Database, Mail } from 'lucide-react';
+import { ArrowLeft, Shield, Eye, Lock, Database, Mail, Home } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import GlassmorphicCard from './GlassmorphicCard';
 
 const PrivacyPolicy = () => {
-  const handleBackClick = () => {
-    window.close();
-  };
-
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
       {/* Background */}
@@ -16,13 +13,13 @@ const PrivacyPolicy = () => {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-12">
-            <button 
-              onClick={handleBackClick}
-              className="flex items-center gap-2 sm:gap-3 text-gray-400 hover:text-white transition-colors mb-6 sm:mb-8 font-inter text-sm sm:text-base"
+            <Link 
+              to="/"
+              className="flex items-center gap-2 sm:gap-3 text-gray-400 hover:text-white transition-colors mb-6 sm:mb-8 font-inter text-sm sm:text-base hover:underline"
             >
-              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Home className="w-4 h-4 sm:w-5 sm:h-5" />
               Back to VALAXIA
-            </button>
+            </Link>
             
             <div className="text-center">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6">
