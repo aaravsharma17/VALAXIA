@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Linkedin, Github, Send, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 import GlassmorphicCard from './GlassmorphicCard';
+import { submitContactMessage } from '../lib/supabase';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,11 +14,6 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
-
-  // EmailJS configuration - You'll need to set these up
-  const EMAILJS_SERVICE_ID = 'service_valaxia'; // Replace with your EmailJS service ID
-  const EMAILJS_TEMPLATE_ID = 'template_valaxia'; // Replace with your EmailJS template ID
-  const EMAILJS_PUBLIC_KEY = 'your_public_key'; // Replace with your EmailJS public key
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -33,28 +28,15 @@ const Contact = () => {
     setSubmitStatus('idle');
 
     try {
-      // Initialize EmailJS (you only need to do this once)
-      emailjs.init(EMAILJS_PUBLIC_KEY);
-
-      // Prepare template parameters
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        subject: formData.subject || 'New Contact Form Submission',
-        message: formData.message,
-        to_email: 'valxgalaxy@gmail.com', // Your email
-        reply_to: formData.email,
-        timestamp: new Date().toLocaleString()
-      };
-
-      // Send email using EmailJS
-      const response = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams
-      );
-
-      if (response.status === 200) {
+      // Try to submit to Supabase first
+      const result = await submitContactMessage({
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject || 'General Inquiry',
+        message: formData.message
+      });
+      
+      if (result.success) {
         setSubmitStatus('success');
         setStatusMessage('Message sent successfully! We\'ll get back to you soon.');
         
@@ -67,19 +49,38 @@ const Contact = () => {
           setStatusMessage('');
         }, 5000);
       } else {
-        throw new Error('Failed to send message');
+        throw new Error('Database submission failed');
       }
-      
     } catch (error) {
-      console.error('Error sending email:', error);
-      setSubmitStatus('error');
-      setStatusMessage('Failed to send message. Please try again or contact us directly at valxgalaxy@gmail.com');
+      // Fallback to email client
+      console.log('Using email fallback:', error);
+      const subject = encodeURIComponent(formData.subject || 'Contact Form Submission - VALAXIA');
+      const body = encodeURIComponent(`
+Name: ${formData.name}
+Email: ${formData.email}
+Subject: ${formData.subject || 'General Inquiry'}
+
+Message:
+${formData.message}
+
+---
+Submitted from VALAXIA Contact Form
+Timestamp: ${new Date().toLocaleString()}
+      `);
       
-      // Clear error message after 8 seconds
+      window.location.href = `mailto:valxgalaxy@gmail.com?subject=${subject}&body=${body}`;
+      
+      setSubmitStatus('success');
+      setStatusMessage('Opening your email client with pre-filled details. Please send the email to complete your message.');
+      
+      // Reset form
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      
+      // Clear message after 5 seconds
       setTimeout(() => {
         setSubmitStatus('idle');
         setStatusMessage('');
-      }, 8000);
+      }, 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -97,14 +98,14 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="relative py-24 px-6 overflow-hidden transition-all duration-1000">
+    <section id="contact" className="relative py-20 px-6 overflow-hidden transition-all duration-1000">
       {/* Infinite Void Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-gray-800/30 via-transparent to-black"></div>
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="text-center mb-20 animate-fade-in-up">
+        <div className="text-center mb-16 animate-fade-in-up">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-white mb-6 font-rajdhani tracking-wide sm:tracking-wider uppercase px-4">
             Connect with VALAXIA
           </h2>
@@ -333,25 +334,24 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Setup Instructions */}
+        {/* Database Setup Instructions */}
         <div className="mt-16">
           <GlassmorphicCard className="p-6 sm:p-8 mx-4">
             <div className="text-center">
               <h3 className="text-xl sm:text-2xl font-bold text-gray-300 mb-4 font-rajdhani">
-                📧 Email Setup Required
+                🗄️ Database Setup Required
               </h3>
               <div className="text-sm sm:text-base text-gray-400 space-y-3 font-inter">
-                <p>To enable direct email delivery from the contact form, please:</p>
+                <p>To enable direct database storage of messages, please:</p>
                 <div className="bg-black/50 p-4 rounded-lg border border-gray-600/30 text-left">
                   <ol className="list-decimal list-inside space-y-2">
-                    <li>Sign up for a free EmailJS account at <a href="https://emailjs.com" target="_blank" className="text-blue-400 hover:text-blue-300">emailjs.com</a></li>
-                    <li>Create an email service (Gmail, Outlook, etc.)</li>
-                    <li>Create an email template</li>
-                    <li>Update the configuration in Contact.tsx with your IDs</li>
+                    <li>Click "Connect to Supabase" button in the top right</li>
+                    <li>Create the required database tables for contact_messages and service_inquiries</li>
+                    <li>Update environment variables in your project</li>
                   </ol>
                 </div>
                 <p className="text-xs text-gray-500">
-                  Until setup is complete, the quick contact buttons will open your default email client
+                  Until setup is complete, forms will open your default email client as fallback
                 </p>
               </div>
             </div>
