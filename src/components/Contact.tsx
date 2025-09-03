@@ -333,31 +333,6 @@ Timestamp: ${new Date().toLocaleString()}
             </GlassmorphicCard>
           </div>
         </div>
-
-        {/* Database Setup Instructions */}
-        <div className="mt-16">
-          <GlassmorphicCard className="p-6 sm:p-8 mx-4">
-            <div className="text-center">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-300 mb-4 font-rajdhani">
-                🗄️ Database Setup Required
-              </h3>
-              <div className="text-sm sm:text-base text-gray-400 space-y-3 font-inter">
-                <p>To enable direct database storage of messages, please:</p>
-                <div className="bg-black/50 p-4 rounded-lg border border-gray-600/30 text-left">
-                  <ol className="list-decimal list-inside space-y-2">
-                    <li>Click "Connect to Supabase" button in the top right</li>
-                    <li>Create the required database tables for contact_messages and service_inquiries</li>
-                    <li>Update environment variables in your project</li>
-                  </ol>
-                </div>
-                <p className="text-xs text-gray-500">
-                  Until setup is complete, forms will open your default email client as fallback
-                </p>
-              </div>
-            </div>
-          </GlassmorphicCard>
-        </div>
-      </div>
     </section>
   );
 };
