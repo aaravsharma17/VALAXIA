@@ -333,7 +333,6 @@ Timestamp: ${new Date().toLocaleString()}
             </GlassmorphicCard>
           </div>
         </div>
-    </section>
   );
 };
 
